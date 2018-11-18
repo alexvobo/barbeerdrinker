@@ -26,7 +26,7 @@ export class BeersService {
     if (beer) {
       return this.http.get<string>(`/api/Beer-Origin/${beer}`);
     }
-    return this.http.get<string[]>('/api/Beer-Originr');
+    return this.http.get<string[]>('/api/Beer-Origin');
   }
 
 }

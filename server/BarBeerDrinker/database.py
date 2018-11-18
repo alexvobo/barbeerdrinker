@@ -7,7 +7,7 @@ engine = create_engine(config.database_uri)
 
 def get_bars():
     with engine.connect() as con:
-        rs = con.execute("SELECT Bar_Name, Bar_License, Bar_City, Bar_Phone, Bar_Address FROM Bar;")
+        rs = con.execute("SELECT Bar_Name, Bar_License, Bar_City, Bar_Phone_Number, Bar_Address FROM Bar;")
         return [dict(row) for row in rs]
 
 def find_bar(name):
@@ -98,19 +98,19 @@ def get_beer_manufacturers(beer):
     with engine.connect() as con:
         if beer is None:
             rs = con.execute('SELECT DISTINCT Beer_Origin FROM Beer;')
-            return [row['manf'] for row in rs]
+            return [row['Beer_Origin'] for row in rs]
 
         query = sql.text('SELECT Beer_Origin FROM Beer WHERE Beer_Name = :beer;')
         rs = con.execute(query, beer=beer)
         result = rs.first()
         if result is None:
             return None
-        return result['manf']
+        return result['Beer_Origin']
 
 
 def get_drinkers():
     with engine.connect() as con:
-        rs = con.execute('SELECT Drinker_Name, Drinker_City, Drinker_Phone, Drinker_Address FROM Drinker;')
+        rs = con.execute('SELECT Drinker_Name, Drinker_City, Drinker_Phone_Number, Drinker_Address FROM Drinker;')
         return [dict(row) for row in rs]
 
 
@@ -120,7 +120,7 @@ def get_likes(drinker_name):
     with engine.connect() as con:
         query = sql.text('SELECT Beer_Name FROM Likes WHERE Drinker_Name = :name;')
         rs = con.execute(query, name=drinker_name)
-        return [row['beer'] for row in rs]
+        return [row['Beer_Name'] for row in rs]
 
 
 def get_drinker_info(drinker_name):

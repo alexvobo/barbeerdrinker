@@ -39,7 +39,7 @@ export class BeersComponent implements OnInit {
   filterBeers(manufacturer: string) {
     this.beers = this.originalBeersList;
     if (manufacturer) {
-      this.beers = this.originalBeersList.filter(beer => beer.manf === manufacturer);
+      this.beers = this.originalBeersList.filter(beer => beer.Beer_Origin === manufacturer);
     }
   }
 
