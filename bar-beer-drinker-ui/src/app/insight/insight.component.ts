@@ -15,15 +15,15 @@ export class InsightComponent implements OnInit {
       data => {
         console.log(data);
 
-        const bars = [];
+        const drinkers = [];
         const counts = [];
 
-        data.forEach(bar => {
-          bars.push(bar.bar);
-          counts.push(bar.frequentCount);
+        data.forEach(drinker => {
+          drinkers.push(drinker.Drinker_Name);
+          counts.push(drinker.frequentCount);
         });
 
-        this.renderChart(bars, counts);
+        this.renderChart(drinkers, counts);
       }
     );
   }
@@ -31,24 +31,24 @@ export class InsightComponent implements OnInit {
   ngOnInit() {
   }
 
-  renderChart(bars: string[], counts: number[]) {
+  renderChart(drinkers: string[], counts: number[]) {
     Highcharts.chart('bargraph', {
       chart: {
         type: 'column'
       },
       title: {
-        text: 'Frequenting count at bars'
+        text: 'Top 20 Least Spenders'
       },
       xAxis: {
-        categories: bars,
+        categories: drinkers,
         title: {
-          text: 'Bar'
+          text: 'Drinkers'
         }
       },
       yAxis: {
         min: 0,
         title: {
-          text: 'Number of customers'
+          text: 'Money Spent'
         },
         labels: {
           overflow: 'justify'

@@ -2,18 +2,18 @@
 from sqlalchemy import create_engine
 from sqlalchemy import sql
 from BarBeerDrinker import config
-
+from datetime import timedelta
 engine = create_engine(config.database_uri)
 
 def get_bars():
     with engine.connect() as con:
-        rs = con.execute("SELECT Bar_Name, Bar_License, Bar_City, Bar_Phone_Number, Bar_Address FROM Bar;")
+        rs = con.execute("SELECT Bar_Name, Bar_License, Bar_City, Bar_State, Bar_Phone_Number, Bar_Address FROM Bar;")
         return [dict(row) for row in rs]
 
 def find_bar(name):
     with engine.connect() as con:
         query = sql.text(
-            "SELECT Bar_Name, Bar_License, Bar_City, Bar_Phone, Bar_Address FROM Bar WHERE name = :name;"
+            "SELECT Bar_Name, Bar_License, Bar_City, Bar_State, Bar_Phone_Number, Bar_Address FROM Bar WHERE Bar_Name = :name;"
         )
 
         rs = con.execute(query, name=name)
@@ -38,15 +38,15 @@ def filter_beers(max_price):
 def get_bar_menu(bar_name):
     with engine.connect() as con:
         query = sql.text(
-            'SELECT a.Bar_Name, a.Beer_Name, a.Price, b.Beer_Origin, coalesce(c.like_count, 0) as Likes \
-                FROM Sells as a \
+            'SELECT a.Bar_Name, a.Beer_Name, a.Price, b.Beer_Origin, coalesce(c.like_count, 0) AS Likes \
+                FROM Sells AS a \
                 JOIN Beer AS b \
                 ON a.Beer_Name = b.Beer_Name \
                 LEFT OUTER JOIN (SELECT Beer_Name, count(*) as like_count FROM Likes GROUP BY Beer_Name) as c \
                 ON a.Beer_Name = c.Beer_Name \
-                WHERE a.Bar_Name = :bar; \
+                WHERE a.Bar_Name = :bar_name; \
             ')
-        rs = con.execute(query, bar=bar_name)
+        rs = con.execute(query, bar_name=bar_name)
         results = [dict(row) for row in rs]
         for i, _ in enumerate(results):
             results[i]['Price'] = float(results[i]['Price'])
@@ -56,7 +56,7 @@ def get_bar_menu(bar_name):
 def get_bars_selling(beer):
     with engine.connect() as con:
         query = sql.text('SELECT a.Bar_Name, a.Price, b.customers \
-                FROM sells AS a \
+                FROM Sells AS a \
                 JOIN (SELECT Bar_Name, count(*) AS customers FROM Frequents GROUP BY Bar_Name) as b \
                 ON a.Bar_Name = b.Bar_Name \
                 WHERE a.Beer_Name = :beer \
@@ -71,10 +71,7 @@ def get_bars_selling(beer):
 
 def get_bar_frequent_counts():
     with engine.connect() as con:
-        query = sql.text('SELECT Bar_Name, count(*) as frequentCount \
-                FROM Frequents \
-                GROUP BY Bar_Name; \
-            ')
+        query = sql.text('SELECT DISTINCT Drinker_Name, max(Totall_Bill_Amount) as frequentCount FROM Orders Group By Drinker_Name ORDER BY frequentCount asc LIMIT 20;')
         rs = con.execute(query)
         results = [dict(row) for row in rs]
         return results
@@ -97,7 +94,7 @@ def get_beers():
 def get_beer_manufacturers(beer):
     with engine.connect() as con:
         if beer is None:
-            rs = con.execute('SELECT DISTINCT Beer_Origin FROM Beer;')
+            rs = con.execute('SELECT Beer_Origin FROM Beer;')
             return [row['Beer_Origin'] for row in rs]
 
         query = sql.text('SELECT Beer_Origin FROM Beer WHERE Beer_Name = :beer;')

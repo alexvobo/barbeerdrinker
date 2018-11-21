@@ -6,14 +6,16 @@ export interface Bar {
   Bar_Name: string;
   Bar_License: string;
   Bar_City: string;
+  Bar_State: string;
   Bar_Phone_Number: string;
   Bar_Address: string;
+
 }
 
 export interface BarMenuItem {
   Beer_Name: string;
   Beer_Origin: string;
-  Beer_Price: number;
+  Price: number;
 }
 
 @Injectable({

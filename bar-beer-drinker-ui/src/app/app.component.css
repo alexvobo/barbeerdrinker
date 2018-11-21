@@ -1,0 +1,11 @@
+.jumbotron {
+    background-color: #81d9a2;
+}
+.body {
+    background: repeating-linear-gradient(
+      -45deg,
+      #696969,
+      #696969 10px,
+      #404040 10px,
+      #404040 20px);
+  }

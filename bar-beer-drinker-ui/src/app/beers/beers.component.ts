@@ -23,10 +23,10 @@ export class BeersComponent implements OnInit {
     );
     this.beerService.getBeerManufacturers().subscribe(
       data => {
-        this.manufacturerOptions = data.map(manf => {
+        this.manufacturerOptions = data.map(origin => {
           return {
-            label: manf,
-            value: manf,
+            label: origin,
+            value: origin,
           };
         });
       }
