@@ -42,11 +42,11 @@ export class BeerDetailsComponent implements OnInit {
       this.filterOptions = [
         {
           'label': 'Low price first',
-          'value': 'low price'
+          'value': 'low Price'
         },
         {
           'label': 'High price first',
-          'value': 'high price'
+          'value': 'high Price'
         },
         {
           'label': 'Most frequented first',
@@ -64,11 +64,11 @@ export class BeerDetailsComponent implements OnInit {
   }
 
   sortBy(selectedOption: string) {
-    if (selectedOption === 'low price') {
+    if (selectedOption === 'low Price') {
       this.beerLocations.sort((a, b) => {
         return a.price - b.price;
       });
-    } else if (selectedOption === 'high price') {
+    } else if (selectedOption === 'high Price') {
       this.beerLocations.sort((a, b) => {
         return b.price - a.price;
       });
