@@ -1,4 +1,4 @@
-# BarBeerDrinker Demo Project
+# BarBeerDrinker Project
 
 This project is structured so that there are two folders - one for UI development using Angular and the other for the server-side application using Flask.
 
