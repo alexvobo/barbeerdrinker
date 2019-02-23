@@ -67,4 +67,3 @@ To run the application
 ```
 python app.py
 ```
-"# barbeerdrinker" 
